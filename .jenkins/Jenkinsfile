@@ -10,7 +10,7 @@ podCreator.initMain(label: label) {
             stage ('Getting test') {
             def myRepo = checkout scm
             env.GIT_BRANCH = myRepo.GIT_BRANCH.replaceAll('/|_', '-')
-                    def data = readJSON file: pwd() + "/.jenkins"
+                    def data = readJSON file: pwd() + "/package.json"
                     println(data)
                     def rookotVersion = data["dependencies"]["rookout"].replace("^","")
                     println(rookotVersion)            
@@ -21,7 +21,7 @@ podCreator.initMain(label: label) {
                 sh("docker build . -t ${dockerTag} && gcloud docker -- push ${dockerTag}")
                 TestUtilities.createTest(this, scriptToUse, jobName, pwd() + "/.jenkins", "Jenkinsfile.test")
                 stage ('Run the tests') {
-                    def packageJsonData = readJSON file: pwd() + "/.jenkins"
+                    def packageJsonData = readJSON file: pwd() + "/package.json"
                     println(packageJsonData)
                     def rookotVersionInFile = data["dependencies"]["rookout"].replace("^","")
                     println(rookotVersionInFile)
