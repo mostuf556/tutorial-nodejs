@@ -21,11 +21,11 @@ podCreator.initMain(label: label) {
                 sh("docker build . -t ${dockerTag} && gcloud docker -- push ${dockerTag}")
                 TestUtilities.createTest(this, scriptToUse, jobName, pwd() + "/.jenkins", "Jenkinsfile.test")
                 stage ('Run the tests') {
-                    def data = readJSON file: pwd() + "/.jenkins"
-                    println(data)
-                    def rookotVersion = data["dependencies"]["rookout"].replace("^","")
-                    println(rookotVersion)
-                    triggerer.regression(GIT_BRANCH : "Rooks/NodeJS-v${rookotVersion}"){
+                    def packageJsonData = readJSON file: pwd() + "/.jenkins"
+                    println(packageJsonData)
+                    def rookotVersionInFile = data["dependencies"]["rookout"].replace("^","")
+                    println(rookotVersionInFile)
+                    triggerer.regression(GIT_BRANCH : "Rooks/NodeJS-v${rookotVersionInFile}"){
                     }
                 }
             }
